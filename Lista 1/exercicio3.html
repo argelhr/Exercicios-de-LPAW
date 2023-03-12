@@ -1,0 +1,40 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container{
+            border-style: dotted;
+            width: 300px;
+            width: 300px;
+            padding: 10px;
+        }
+        .div{
+            border: 20px solid black;
+            border-bottom-color: #999;
+            width: 250px;
+            height: 250px;
+            border-radius: 100%;
+            border-radius: 50%;
+            animation: loading 1s linear infinite;
+            animation-play-state: paused;
+        }
+        .container:hover .div{
+            animation-play-state: running;
+        }
+        @keyframes loading {
+           to{
+                transform: rotate(360deg);
+            }
+            
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="div"></div>
+    </div>
+</body>
+</html>

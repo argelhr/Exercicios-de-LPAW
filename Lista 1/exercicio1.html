@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container{
+            margin-top: 20px;
+            display: flex;
+            align-items:center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-group{
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+        }
+
+        input,input:focus{
+            text-align: center;
+            border: none;
+            outline: none;
+            border-bottom: #333 1px solid;
+        }
+
+        input::placeholder{
+            transition-duration: .1s,2s;
+        }
+
+        label{
+            position: relative;
+            color: transparent;
+            top:1.25rem;
+            transition-duration: .5s;
+        }
+
+        .input-group:focus-within label{
+            transform: translateY(-1.25rem);
+            font-size: 1.4rem;
+            color: #333;
+        }
+
+        .input-group:focus-within input::placeholder{
+            color: transparent;
+        }
+        
+        .input-group:not(:focus-within) label {
+            transition-duration: 0s;
+        }
+
+        button{
+            outline:0;
+            width: 150px;
+            height: 50px;
+            background-color: #999;
+            color: white;
+            font-weight:bold;
+        }
+        
+        button:hover {
+            box-shadow: 2px 2px 5px #1e1e1e;
+            background-color: #1e1e1e;
+            padding-top: 5px;
+            color:  white;
+            animation-name: interno;
+            animation-duration: .5s;
+            animation-iteration-count: 3;
+        }
+        button:active{
+            scale: .95;
+        }
+        @keyframes interno {
+            from {
+                border-left:  0 solid #999;
+                border-right: 0 solid #999;
+            }
+            to{
+                border-left:  30px solid #111;
+                border-right: 30px solid #111;
+            }
+            
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="input-group">
+            <label for="login">Username:</label>
+            <input id="login" type="text" name="login" placeholder="Username">
+        </div>
+        <div class="input-group">
+            <label for="password">Password:</label>
+            <input id="password" type="password" name="login" placeholder="Password">
+        </div>
+        <div class="button-group">
+            <button>Enter</button>
+        </div>
+    </div>
+</body>
+</html>
