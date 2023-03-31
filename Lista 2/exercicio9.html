@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercicio 9</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="600" height="400">
+        Seu navegador não suporta a tag canvas
+    </canvas>
+</body>
+<script src="./javascript.js"></script>
+<script>
+
+    //tamanho do canvas
+    let totalX = canvas.width
+    let totalY = canvas.height
+    let meioX = totalX / 2
+    let meioY = totalY / 2
+    
+    //retangulo de baixo
+    quad(ctx, 0, meioY, totalX, totalY, '#0b1932', '#0b1932')
+    
+    //luz de reflexo
+   
+    let gradiente = ctx.createRadialGradient(meioX, meioY + 20, 5, meioX, totalY+100, 310);
+    gradiente.addColorStop(0, 'white')
+    gradiente.addColorStop(0.8,'rgb(11, 25, 50)')
+    
+    circ(ctx, meioX, totalY, 300, 10, 'transparent', gradiente)
+    
+    //retangulo de cima
+    quad(ctx, 0, 0, totalX, meioY, '#120133', '#120133')
+
+    //"sombra da luz"
+    ctx.shadowColor = "yellow";
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+    ctx.shadowBlur = 8;
+    
+    //luz
+    gradiente = ctx.createRadialGradient(meioX, meioY - 100, 50, meioX, meioY - 100, 5)
+    
+    gradiente.addColorStop(.1, "rgb(255,255,0,.9)")
+    gradiente.addColorStop(.15, "rgb(255,255,0,.9)")
+    gradiente.addColorStop(.5, "rgb(255,255,255)")
+    circ(ctx, meioX, meioY - 100, 60, 1, 'transparente', gradiente)
+    
+    
+
+
+</script>
+
+</html>

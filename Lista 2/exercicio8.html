@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercicio 8</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="600" height="400">
+        Seu navegador não suporta a tag canvas
+    </canvas>
+</body>
+<script src="./javascript.js"></script>
+<script>
+
+    let gradiente = ctx.createLinearGradient(0, 0, canvas.width, canvas.height)
+
+    gradiente.addColorStop(0, "#0f0")
+    gradiente.addColorStop(.5, "#f00")
+    gradiente.addColorStop(.9, "#00f")
+    ctx.fillStyle = gradiente;
+
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+    let texto = "AZUL, VERMELHO, LARANJA, AMARELO"
+    let tamanho = ctx.measureText(texto)
+    let x0 = canvas.width / 2 - tamanho.width / 2;
+    let y0 = canvas.height / 2 - 24
+
+    let x1 = canvas.width / 2 + tamanho.width / 2;
+
+
+    let CORTexto = ctx.createLinearGradient(x0,y0,x1,y0)
+
+    CORTexto.addColorStop(0, "#ff0")
+    CORTexto.addColorStop(.5, "#0f0")
+    CORTexto.addColorStop(.9, "#0ff")
+
+    writeCenterXY(ctx, canvas.width, canvas.height,
+        texto, CORTexto, 24, 'sans', 'bold', 'top')
+
+
+</script>
+
+</html>
