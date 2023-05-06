@@ -76,7 +76,7 @@ export default class Circle {
 	}
 
 	colide(circ) {
-		return Math.sqrt((circ.x - this.x) ** 2 + (circ.y - this.y) ** 2) < this.size + circ.size;
+		return Math.sqrt((circ.x - this.x) ** 2 + (circ.y - this.y) ** 2) <= this.size + circ.size;
 	}
 
 	trocaCor(){

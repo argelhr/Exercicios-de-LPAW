@@ -19,23 +19,23 @@ const loop = () => {
 		let textSize = 40;
 		CTX.font = `bold ${textSize}px sans`;
 		CTX.textBaseline = "top";
-		CTX.fillStyle = 'rgba(0,0,0,0.02)'
+		CTX.fillStyle = 'rgba(0,0,0,0.05)'
 		CTX.fillRect(0, 0,
 			CANVAS.width, CANVAS.height)
-		let texto = Math.floor(Math.random() * letras.length*10)
-		console.log(Math.random()*letras.length*10)
-		console.log(texto)
-
+		let texto = letras[Math.floor(Math.random() * letras.length)]
 
 		CTX.fillStyle = "green"
 		CTX.fillText(texto, x, y)
 
-		x += textSize/2
+		x += textSize / 2
 		if (x > CANVAS.width) {
 			y += textSize
 			x = 0
 		}
-
+		if (x > CANVAS.width && y > CANVAS.height) {
+			x = 0
+			y = 0
+		}
 		requestAnimationFrame(loop)
 	}, 1000 / FRAMES)
 }
