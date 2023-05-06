@@ -1,66 +1,86 @@
 
-let CTX
-let CANVAS
+let CANVAS = document.querySelector('canvas')
+let CTX = CANVAS.getContext('2d')
 const FRAMES = 60
 
-let letras = "ABCDEFGHIJKLMNOPQRSTUVXYZ0123456789"
-letras = letras.split()
-
+let letras = 'ABCDEFGHIJKLMNOPQRSTUVXYZ0123456789'
+letras = letras.split('')
 let boundaries
 
 let x = 0
 let y = 0
 
+let textSize = 24;
+let colunas
+let drops
+
 const loop = () => {
 	setTimeout(() => {
 
-
-
-		let textSize = 40;
 		CTX.font = `bold ${textSize}px sans`;
 		CTX.textBaseline = "top";
-		CTX.fillStyle = 'rgba(0,0,0,0.05)'
-		CTX.fillRect(0, 0,
-			CANVAS.width, CANVAS.height)
-		let texto = letras[Math.floor(Math.random() * letras.length)]
+
+		CTX.fillStyle = 'rgba(0,0,0,0.15)'
+		CTX.fillRect(0, 0, CANVAS.width, CANVAS.height)
+
 
 		CTX.fillStyle = "green"
-		CTX.fillText(texto, x, y)
 
-		x += textSize / 2
-		if (x > CANVAS.width) {
-			y += textSize
-			x = 0
+		// for (x = 0; x < drops.length; x++) {
+		// 	drops.forEach(() => {
+		// 		CTX.fillText(texto, x*textSize, y);
+		// 		y += textSize;
+		// 	})
+		// }
+
+		x = x > CANVAS.width ? 0 : x
+
+		for (let i = 0; i < colunas; i++) {
+
+			let texto = letras[Math.floor(Math.random() * letras.length)]
+			CTX.fillText(texto, x, drops[i])
+
+			x += textSize
+			drops[i] += textSize / 2
+
+			if (Math.random() > 0.99) {
+				CTX.fillStyle = "white"
+				CTX.fillText('C', x, drops[i])
+				drops[i] += textSize
+				CTX.fillText('S', x, drops[i])
+				drops[i] += textSize
+				CTX.fillText('T', x, drops[i])
+				drops[i] += textSize
+				CTX.fillText('S', x, drops[i])
+				drops[i] += textSize
+				CTX.fillText('I', x, drops[i])
+				drops[i] += textSize
+				CTX.fillStyle = "green"
+			}
+
+			if (drops[i] > CANVAS.width && Math.random() > 0.9)
+				drops[i] = 1
+
 		}
-		if (x > CANVAS.width && y > CANVAS.height) {
-			x = 0
-			y = 0
-		}
+
 		requestAnimationFrame(loop)
-	}, 1000 / FRAMES)
+	}, 1000 / 15)
 }
 
-// export default function init(){
-// function init(){
+
 const init = () => {
 	console.log("Initialize Canvas")
-	CANVAS = document.querySelector('canvas')
-	CTX = CANVAS.getContext('2d')
 
-	boundaries = {
-		width: CANVAS.width,
-		height: CANVAS.height
-	}
+	colunas = CANVAS.width / textSize
 
-	CTX.linewidth = 5;
-	CTX.beginPath();
-	CTX.rect(0, 0, boundaries.width, boundaries.height);
-	CTX.strokeStyle = '#black';
-	CTX.fill();
+	drops = Array.from({ length: colunas }).fill(1)
 
 
-
-
+	CTX.linewidth = 1;
+	CTX.beginPath()
+	CTX.rect(0, 0, CANVAS.width, CANVAS.height);
+	CTX.strokeStyle = "black";
+	CTX.fill()
 
 
 	loop()
