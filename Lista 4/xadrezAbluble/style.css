@@ -14,9 +14,21 @@
   -webkit-text-size-adjust: 100%;
 }
 
-canvas{
-  background-color: red;
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
 }
+canvas{
+  position: relative;
+  margin: auto auto;
+  z-index: 1;
+  border: 2px solid #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px #fff;
+  }
 
 a {
   font-weight: 500;
