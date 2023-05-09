@@ -5,76 +5,70 @@ const FRAMES = 60
 
 let letras = 'ABCDEFGHIJKLMNOPQRSTUVXYZ0123456789'
 letras = letras.split('')
-let boundaries
+
+let CSTSI = 'CSTSI'
+CSTSI = CSTSI.split('')
 
 let x = 0
 let y = 0
 
-let textSize = 24;
+let textSize = 40;
 let colunas
-let drops
+let drops //array
+let texto
+let flags //array pra colocar o CSTSI
+
+CTX.font = `bold ${textSize}px sans`
+CTX.textBaseline = "top"
 
 const loop = () => {
+
 	setTimeout(() => {
 
-		CTX.font = `bold ${textSize}px sans`;
-		CTX.textBaseline = "top";
-
-		CTX.fillStyle = 'rgba(0,0,0,0.15)'
+		CTX.fillStyle = 'rgba(0,0,0,0.05)'
 		CTX.fillRect(0, 0, CANVAS.width, CANVAS.height)
 
-
 		CTX.fillStyle = "green"
-
-		// for (x = 0; x < drops.length; x++) {
-		// 	drops.forEach(() => {
-		// 		CTX.fillText(texto, x*textSize, y);
-		// 		y += textSize;
-		// 	})
-		// }
 
 		x = x > CANVAS.width ? 0 : x
 
 		for (let i = 0; i < colunas; i++) {
 
-			let texto = letras[Math.floor(Math.random() * letras.length)]
+			// if (flags[i] < 5) {
+			// 	texto = CSTSI[flags[i]]
+			// 	CTX.fillStyle = 'white'
+			// 	flags[i] += 1
+			// }
+			// else
+			texto = letras[Math.floor(Math.random() * letras.length)]
+
 			CTX.fillText(texto, x, drops[i])
 
 			x += textSize
 			drops[i] += textSize / 2
 
-			if (Math.random() > 0.99) {
-				CTX.fillStyle = "white"
-				CTX.fillText('C', x, drops[i])
-				drops[i] += textSize
-				CTX.fillText('S', x, drops[i])
-				drops[i] += textSize
-				CTX.fillText('T', x, drops[i])
-				drops[i] += textSize
-				CTX.fillText('S', x, drops[i])
-				drops[i] += textSize
-				CTX.fillText('I', x, drops[i])
-				drops[i] += textSize
-				CTX.fillStyle = "green"
-			}
+			// if (Math.random() > 0.995 && flags[i] == 5)
+			// 	flags[i] = 0
 
-			if (drops[i] > CANVAS.width && Math.random() > 0.9)
+			// if (flags[i] == 4)
+			// 	flags[i] = 0;
+
+			if (drops[i] > CANVAS.width && Math.random() > 0.95)
 				drops[i] = 1
 
 		}
-
 		requestAnimationFrame(loop)
-	}, 1000 / 15)
+	}, 1000 / FRAMES)
 }
 
 
 const init = () => {
 	console.log("Initialize Canvas")
 
-	colunas = CANVAS.width / textSize
+	colunas = Math.floor(CANVAS.width / textSize)
 
 	drops = Array.from({ length: colunas }).fill(1)
-
+	flags = Array.from({ length: colunas }).fill(5)
 
 	CTX.linewidth = 1;
 	CTX.beginPath()

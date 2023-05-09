@@ -13,7 +13,7 @@ export default class Enemy extends Circle{
 
 	limits(limits){
 
-		if(this.y - this.size > limits.height ){
+		if(this.y - this.size > limits.height && Math.random() > 0.97){
 			this.trocaCor()
 			this.y = 0
 			this.x = Math.random()*limits.width;

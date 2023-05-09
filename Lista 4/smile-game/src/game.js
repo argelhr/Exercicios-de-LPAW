@@ -30,6 +30,8 @@ const loop = () => {
 
 
 		CTX.clearRect(0, 0, CANVAS.width, CANVAS.height)
+		CTX.fillStyle = 'rgba(255,255,255,0.5)'
+		CTX.fillRect(0,0,CANVAS.width,CANVAS.height)
 		//input
 
 		let textSize = 24;
@@ -52,14 +54,6 @@ const loop = () => {
 			30,
 			textSize / 3
 		)
-
-		// texto = smile.tempo == 300 ? 'Power ON!': 'Loading...'
-		// textMetric = CTX.measureText(texto);
-		// CTX.fillText(
-		// 	texto,
-		// 	CANVAS.width *.8 - textMetric.width / 2,
-		// 	textSize / 2
-		// )
 
 		CTX.strokeStyle = 'blue';
 		CTX.strokeRect(boundaries.width-105, 5, 100, 25);

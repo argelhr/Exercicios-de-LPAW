@@ -8,6 +8,7 @@ let x = 0
 let y = 0
 let quad = new Quad(0, 0, CANVAS.width, CANVAS.height, 'WHITE')
 let controle = 0
+let FRAMES = 60
 
 const init = () => {
 
@@ -17,12 +18,9 @@ const init = () => {
 
 
     CTX.lineWidth = 5;
-    // for (y = 0; y < limites.y; y += aux){
-    //     for (x = 0; x < limites.x; x += aux) {
+    CTX.fillStyle = 'black'
+    CTX.fillRect(0, 0, CANVAS.width, CANVAS.height)
 
-    //         CTX.fillStyle = x % 2 == 0 ? 'black' : 'white';
-    //         CTX.fillRect(x, y, aux, aux);
-    //     }
     loop()
 }
 
@@ -48,16 +46,17 @@ const loop = () => {
             y += aux
             if (aux > 13)
                 aux /= 2
-            if (y > CANVAS.height) {
-                cancelAnimationFrame(loop)
-            }
         }
 
         controle++
-        console.log(aux)
+        
+        if (y > 400) {
+            cancelAnimationFrame(loop)
+        }
+        console.log(y)
 
         requestAnimationFrame(loop)
-    }, 1000 / 15)
+    }, 1000 / FRAMES)
 }
 
 

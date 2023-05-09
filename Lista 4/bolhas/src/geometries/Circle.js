@@ -86,6 +86,6 @@ export default class Circle {
 		this.color = `#${aux1}${aux2}${aux3}`
 	}
 	trocaTamanho(){
-		this.size = Math.floor(Math.random()*40)
+		this.size = (Math.random()*40)
 	}
 }

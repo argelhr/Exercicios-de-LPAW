@@ -37,10 +37,7 @@ export default class Smile extends Circle {
 
 	move(limits, key) {
 		let movements = {
-			'ArrowDown': {
-				sx: 0,
-				sy: this.speed
-			},
+			'ArrowDown': {sx: 0,sy: this.speed},
 			'ArrowUp': { sx: 0, sy: - this.speed },
 			'ArrowLeft': { sx: - this.speed, sy: 0 },
 			'ArrowRight': { sx: this.speed, sy: 0 },
