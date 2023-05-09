@@ -17,10 +17,10 @@
 <script>
 
     //tamanho do canvas
-    let totalX = canvas.width
-    let totalY = canvas.height
-    let meioX = totalX / 2
-    let meioY = totalY / 2
+    const totalX = canvas.width
+    const totalY = canvas.height
+    const meioX = totalX / 2
+    const meioY = totalY / 2
     
     //retangulo de baixo
     quad(ctx, 0, meioY, totalX, totalY, '#0b1932', '#0b1932')
@@ -29,7 +29,7 @@
    
     let gradiente = ctx.createRadialGradient(meioX, meioY + 20, 5, meioX, totalY+100, 310);
     gradiente.addColorStop(0, 'white')
-    gradiente.addColorStop(0.8,'rgb(11, 25, 50)')
+    gradiente.addColorStop(0.8,'rgb(11, 25, 50,.1)')
     
     circ(ctx, meioX, totalY, 300, 10, 'transparent', gradiente)
     

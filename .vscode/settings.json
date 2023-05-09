@@ -1,0 +1,6 @@
+{
+    "files.exclude": {
+        "./\"Tela pro jogo\"": true,
+        "\"Tela pro jogo\"": true
+    }
+}

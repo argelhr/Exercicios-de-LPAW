@@ -1,7 +1,7 @@
 
 let CANVAS = document.querySelector('canvas')
 let CTX = CANVAS.getContext('2d')
-const FRAMES = 60
+const FRAMES = 30
 
 let letras = 'ABCDEFGHIJKLMNOPQRSTUVXYZ0123456789'
 letras = letras.split('')
@@ -25,38 +25,38 @@ const loop = () => {
 
 	setTimeout(() => {
 
-		CTX.fillStyle = 'rgba(0,0,0,0.05)'
+		CTX.fillStyle = 'rgba(0,0,0,0.1)'
 		CTX.fillRect(0, 0, CANVAS.width, CANVAS.height)
 
-		CTX.fillStyle = "green"
-
-		x = x > CANVAS.width ? 0 : x
-
+		
+		x = x >= CANVAS.width ? 0 : x
+		
 		for (let i = 0; i < colunas; i++) {
-
-			// if (flags[i] < 5) {
-			// 	texto = CSTSI[flags[i]]
-			// 	CTX.fillStyle = 'white'
-			// 	flags[i] += 1
-			// }
-			// else
-			texto = letras[Math.floor(Math.random() * letras.length)]
+			
+			if (flags[i] <= 4) {
+				texto = CSTSI[flags[i]]
+				CTX.fillStyle = 'white'
+				flags[i] += 1
+				console.log(flags)
+			}
+			else{
+				CTX.fillStyle = "green"
+				texto = letras[Math.floor(Math.random() * letras.length)]
+			}
 
 			CTX.fillText(texto, x, drops[i])
 
 			x += textSize
-			drops[i] += textSize / 2
+			drops[i] += textSize
 
-			// if (Math.random() > 0.995 && flags[i] == 5)
-			// 	flags[i] = 0
+			if (Math.random() > 0.9995 && flags[i] >= 5)
+				flags[i] = 0
 
-			// if (flags[i] == 4)
-			// 	flags[i] = 0;
-
-			if (drops[i] > CANVAS.width && Math.random() > 0.95)
+			if (drops[i] > CANVAS.width && Math.random() > 0.98)
 				drops[i] = 1
 
 		}
+		
 		requestAnimationFrame(loop)
 	}, 1000 / FRAMES)
 }
@@ -67,8 +67,8 @@ const init = () => {
 
 	colunas = Math.floor(CANVAS.width / textSize)
 
-	drops = Array.from({ length: colunas }).fill(1)
-	flags = Array.from({ length: colunas }).fill(5)
+	drops = Array.from({ length: colunas },() => 1)//.fill(1)
+	flags = Array.from({ length: colunas },() => 5)//.fill(5)
 
 	CTX.linewidth = 1;
 	CTX.beginPath()
