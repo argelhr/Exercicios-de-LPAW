@@ -10,7 +10,6 @@ let CSTSI = 'CSTSI'
 CSTSI = CSTSI.split('')
 
 let x = 0
-let y = 0
 
 let textSize = 40;
 let colunas
@@ -49,7 +48,7 @@ const loop = () => {
 			x += textSize
 			drops[i] += textSize
 
-			if (Math.random() > 0.9995 && flags[i] >= 5)
+			if (Math.random() > 0.995 && flags[i] >= 5)
 				flags[i] = 0
 
 			if (drops[i] > CANVAS.width && Math.random() > 0.98)

@@ -8,7 +8,7 @@ let x = 0
 let y = 0
 let quad = new Quad(0, 0, CANVAS.width, CANVAS.height, 'WHITE')
 let controle = 0
-let FRAMES = 60
+let FRAMES = 15
 
 const init = () => {
 
@@ -18,7 +18,7 @@ const init = () => {
 
 
     CTX.lineWidth = 5;
-    CTX.fillStyle = 'black'
+    CTX.fillStyle = 'white'
     CTX.fillRect(0, 0, CANVAS.width, CANVAS.height)
 
     loop()
