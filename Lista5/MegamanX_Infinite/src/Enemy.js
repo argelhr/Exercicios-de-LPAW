@@ -8,14 +8,14 @@ export default class Enemy extends Circle {
 		loadImage(this.imgURL)
 			.then(img => {
 				this.img = img
-				this.cellWidth = img.naturalWidth/this.totalSprites
+				this.cellWidth = img.naturalWidth / this.totalSprites
 
 			})
 		this.line = 1
 		this.width = 47
 		this.height = 39
 
-		this.cellHeight= 177
+		this.cellHeight = 177
 		this.cellX = 0
 		this.totalSprites = 3
 		this.spriteSpeed = 1
@@ -64,11 +64,19 @@ export default class Enemy extends Circle {
 
 	limits(limits) {
 
-		if (this.x <0 && Math.random() > 0.9755) {
+		if (this.x < 0 && Math.random() > 0.9755) {
 			// this.trocaCor()
+			this.frameX = 0
 			this.y = Math.random() * limits.height
 			this.x = limits.width + 70
 		}
+	}
+
+	respawn(limits) {
+		this.frameX = 0
+		this.y = Math.random() * limits.height
+		this.x = limits.width + 70
+
 	}
 
 	animeSprite(FRAMES) { //Controla a animacao do sprite

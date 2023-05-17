@@ -18,12 +18,13 @@ export default class Hero extends Circle {
 		this.esquerda = false
 		this.direita = false
 		this.atirando = false
+		
+		this.libera_tiro = false
 
 		this.pulo = false
 
 		this.pulando = false
 		this.chao = true
-		this.libera_tiro = false
 		this.gravidade = 10
 		this.velocidadeY = 18
 
@@ -32,7 +33,6 @@ export default class Hero extends Circle {
 		this.frameX = 0
 		this.frameY = 0
 		this.atirando = false
-		this.tiroCOOLDOWN = 60
 
 		this.altura = 38
 		this.largura = 38
@@ -70,7 +70,7 @@ export default class Hero extends Circle {
 
 			let tiro
 			if (this.esquerda)
-				tiro = new Projetil(this.x + this.largura, this.y + this.altura, 5, -15, 'blue', 'img/projetil.png');
+				tiro = new Projetil(this.x + this.largura, this.y + this.altura, 5, -15, 'blue', 'img/X.png');
 			else
 				tiro = new Projetil(this.x, this.y + this.altura, 5, 15, 'blue', 'img/projetil.png');
 			this.tiros.push(tiro);

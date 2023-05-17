@@ -45,7 +45,7 @@ export default class Circle {
 			case 'd':
 				this.status = 'right'
 				break
-			
+
 		}
 
 		switch (this.status) {
@@ -75,13 +75,14 @@ export default class Circle {
 	}
 
 	colide(circ) {
+		// console.log(circ.x)
 		return Math.sqrt((circ.x - this.x) ** 2 + (circ.y - this.y) ** 2) <= this.size + circ.size;
 	}
 
-	trocaCor(){
-		let aux1 = Math.floor(Math.random()*10)
-		let aux2 = Math.floor(Math.random()*10)
-		let aux3 = Math.floor(Math.random()*10)
+	trocaCor() {
+		let aux1 = Math.floor(Math.random() * 10)
+		let aux2 = Math.floor(Math.random() * 10)
+		let aux3 = Math.floor(Math.random() * 10)
 		this.color = `#${aux1}${aux2}${aux3}`
 	}
 }
