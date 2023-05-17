@@ -1,37 +1,44 @@
 
 import Circle from "./model/Circle";
 import { loadImage } from "./loadAssets";
+import { getKeys, hasKey } from "./keyboard";
+import Projetil from "./Projetil";
 
 export default class Hero extends Circle {
 
-	constructor(x, y, size, speed = 10, width, height, imgUrl, FRAMES) {
-		super(x, y, size = 20, speed)
+	constructor(x, y, size, speed = 15, width, height, imgUrl) {
+		super(x, y, size, speed)
 		this.imgUrl = imgUrl
 		loadImage(this.imgUrl)
 			.then(img => {
 				this.img = img
-				this.cellWidth = img.naturalWidth / this.totalSprites
-				console.log('W:' + this.cellWidth)
 			})
-		this.gravidade = 10
+
+		this.parado = true
+		this.esquerda = false
+		this.direita = false
+		this.atirando = false
+
+		this.pulo = false
 
 		this.pulando = false
-		this.caindo = false
-		this.alturaPULO = 50
+		this.chao = true
+		this.libera_tiro = false
+		this.gravidade = 10
+		this.velocidadeY = 18
 
+		this.tiros = []
 
-		this.altura = 35
-		this.largura = 43
-		this.totalSprites = 11
-		this.spriteSpeed = 6
-		console.log('H:' + this.altura)
+		this.frameX = 0
+		this.frameY = 0
+		this.atirando = false
+		this.tiroCOOLDOWN = 60
 
-		this.setControls()
+		this.altura = 38
+		this.largura = 38
 
 		this.width = width
 		this.height = height
-
-		this.status = 'rigth'
 
 		this.hit = new Circle(
 			this.x + this.width,
@@ -48,77 +55,119 @@ export default class Hero extends Circle {
 
 		CTX.drawImage(
 			this.img,
-			0, 0, 43, 35,
-
+			this.frameX * this.largura, this.frameY * this.altura,
+			this.largura, this.altura,
 			this.x, this.y,
-			this.width * 2, this.height * 2
+			this.largura * 2, this.altura * 2
 		)
 
 		this.hit.draw(CTX)
 	}
 
-	animeSprite(FRAMES) { //Controla a animacao do sprite
-		setInterval(() => {
-			this.cellX = this.cellX < this.totalSprites - 1
-				? this.cellX + 1
-				: 3;
-		}, 1000 / (FRAMES * this.spriteSpeed / 10))
-	}
+	buster() {
+		if (!this.libera_tiro) {
+			console.log(this.tiros)
 
-	setControls() {
-		this.controls = {
-			'KeyA': 'left',
-			'KeyD': 'rigth',
-			'Space': 'up'
-		}
-	}
-
-	setCellY() {
-		let sprites = {
-			// 'down': 0,
-			// 'up': 1,
-			// 'left': 3,
-			// 'rigth':2
-			'rigth': 0,
-			'up': 1,
-
-			'left': 2
+			let tiro
+			if (this.esquerda)
+				tiro = new Projetil(this.x + this.largura, this.y + this.altura, 5, -15, 'blue', 'img/projetil.png');
+			else
+				tiro = new Projetil(this.x, this.y + this.altura, 5, 15, 'blue', 'img/projetil.png');
+			this.tiros.push(tiro);
 
 		}
-
-		this.cellY = sprites[this.status]
 	}
 
-	move(limits, keys) {
-		
-		// let movements = {
-		// 	'left': { x: this.x - this.speed },
-		// 	'rigth': { x: this.x + this.speed },
-		// 	'parado': { x: this.x },
-		// 	'jump' : { x: this.x}
-		// }
 
 
-		// this.status = this.controls[keys] ? this.controls[keys] : 'parado'
-		// this.x = movements[this.status].x
+	move(limits, plataformas) {
+		this.y += this.gravidade
+
+		if (this.direita) {
+			this.x += this.speed
+			this.frameX += 1
+			if (this.atirando)
+				this.frameY = 1
+			else
+				this.frameY = 0
+			if (this.frameX > 11)
+				this.frameX = 2
+		}
+		if (this.esquerda) {
+			this.x -= this.speed
+			this.frameX += 1
+
+			if (this.atirando)
+				this.frameY = 3
+			else
+				this.frameY = 2
+
+			if (this.frameX > 11)
+				this.frameX = 2
+		}
+
+		if (this.pulo) {
+			this.chao = false
+			this.pulando = true
+			this.y -= this.velocidadeY
+			this.frameX += 1
+			if (this.esquerda)
+				if (this.atirando)
+					this.frameY = 7
+				else
+					this.frameY = 6
+			else
+				if (this.atirando)
+					this.frameY = 5
+				else
+					this.frameY = 4
+
+			if (this.frameX >= 11)
+				this.frameX = 2
+		}
+
+		if (this.atirando) {
+			this.buster()
+		}
+		else
+			this.libera_tiro = false
+
+
+
+		if (getKeys().length === 0)
+			this.frameX = 0
+
+
+		this.esquerda = hasKey('KeyA') ? true : false
+		this.direita = hasKey('KeyD') ? true : false
+		this.atirando = hasKey('Enter') ? true : false
+		this.pulo = hasKey('Space') ? true : false
+
+		hasKey('KeyD') && hasKey('KeyA') ? this.frameX = 0 : null
+
 
 		this.updateHit()
 		this.limits(limits)
 
+		plataformas.forEach(plat => {
+			plat.colide(this)
+		});
 
 
 	}
 
 	limits(limits) {
-		if (this.x + this.largura > limits.width - this.largura)
-			this.x = limits.width - this.largura * 2
-		if (this.x <= 0)
+		if (this.x < 0)
 			this.x = 0
+		if (this.y < 0)
+			this.y = 0
+		if (this.x + this.largura * 2 >= limits.width)
+			this.x = limits.width - this.largura * 2
+		if (this.y + this.altura / 3 > limits.height) {
+			this.y = limits.height - this.altura / 3
+			this.chao = true
+		}
 
-		if (this.y + this.largura > limits.height)
-			this.y = limits.height - this.largura
-		if (this.y - this.largura <= 0)
-			this.y = this.largura
 	}
 
 	updateHit() {
@@ -130,19 +179,5 @@ export default class Hero extends Circle {
 		return (this.hit.size + other.size >= Math.sqrt(
 			(this.hit.x - other.x) ** 2 + (this.hit.y - other.y) ** 2)
 		)
-	}
-
-	pulo() {
-		this.y -= this.gravidade
-		this.alturaPULO -= 5
-		this.pulando = true
-		console.log(this.alturaPULO)
-	}
-	fall() {
-		this.y += this.gravidade/2
-		this.alturaPULO += 5
-		if (this.alturaPULO >= 50)
-			this.alturaPulo = 50
-		this.pulando = false
 	}
 }
