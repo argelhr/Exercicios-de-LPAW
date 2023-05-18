@@ -2,7 +2,7 @@ import { loadImage } from "../loadAssets";
 import Circle from "./Circle";
 
 export default class Heart extends Circle {
-    constructor(x, y, size, speed = 10, color, imgURL, total_frame,FRAMES = 60) {
+    constructor(x, y, size, speed = 10, color, imgURL, total_frame,FRAMES = 60,w,h) {
         super(x, y, size, speed, color)
         this.imgURL = imgURL
         loadImage(this.imgURL)
@@ -10,8 +10,8 @@ export default class Heart extends Circle {
                 this.img = img
             })
         this.line = 1
-        this.width = 15
-        this.height = 16
+        this.width = w
+        this.height = h
 
         this.total_frame = total_frame
         this.FRAMES = FRAMES
