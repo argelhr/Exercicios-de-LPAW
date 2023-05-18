@@ -1,6 +1,6 @@
 export default class Circle {
 
-	constructor(x, y, size, speed = 10, color = "#00f") {
+	constructor(x, y, size, speed = 10, color) {
 		this.x = x;
 		this.y = y;
 		this.size = size;
@@ -15,7 +15,7 @@ export default class Circle {
 			this.y,
 			this.size,
 			this.line = 0,
-			this.color = 'rgba(0,0,255,0.3')
+			this.color = 'rgba(0,0,255,0.8')
 	}
 
 	circ(ctx, pos_x, pos_y, radius, line, color, fill = false) {
@@ -30,59 +30,8 @@ export default class Circle {
 		}
 	}
 
-	anda(limits, key) {
-
-		switch (key) {
-			case 's':
-				this.status = 'down'
-				break
-			case 'w':
-				this.status = 'up'
-				break
-			case 'a':
-				this.status = 'left'
-				break
-			case 'd':
-				this.status = 'right'
-				break
-
-		}
-
-		switch (this.status) {
-			case 'down':
-				this.y += this.speed
-				break
-			case 'up':
-				this.y -= this.speed
-				break
-			case 'left':
-				this.x -= this.speed
-				break
-			case 'right':
-				this.x += this.speed
-				break
-		}
-
-		if (this.x > limits.width)
-			this.x = -this.size
-		else if (this.x + this.size < 0)
-			this.x = limits.width - this.size
-
-		if (this.y > limits.height)
-			this.y = -this.size
-		else if (this.y + this.size < 0)
-			this.y = limits.height - this.size
-	}
-
 	colide(circ) {
 		// console.log(circ.x)
-		return Math.sqrt((circ.x - this.x) ** 2 + (circ.y - this.y) ** 2) <= this.size + circ.size;
-	}
-
-	trocaCor() {
-		let aux1 = Math.floor(Math.random() * 10)
-		let aux2 = Math.floor(Math.random() * 10)
-		let aux3 = Math.floor(Math.random() * 10)
-		this.color = `#${aux1}${aux2}${aux3}`
+		return Math.abs(Math.sqrt((circ.x - this.x) ** 2 + (circ.y - this.y) ** 2)) <= this.size + circ.size;
 	}
 }

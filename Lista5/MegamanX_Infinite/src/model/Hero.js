@@ -1,7 +1,7 @@
 
-import Circle from "./model/Circle";
-import { loadImage } from "./loadAssets";
-import { getKeys, hasKey } from "./keyboard";
+import Circle from "./Circle";
+import { loadImage } from "../loadAssets";
+import { getKeys, hasKey } from "../keyboard";
 import Projetil from "./Projetil";
 
 export default class Hero extends Circle {
@@ -18,17 +18,13 @@ export default class Hero extends Circle {
 		this.esquerda = false
 		this.direita = false
 		this.atirando = false
-		
-		this.libera_tiro = false
-
 		this.pulo = false
 
-		this.pulando = false
+		this.libera_tiro = false
+
 		this.chao = true
 		this.gravidade = 10
 		this.velocidadeY = 18
-
-		this.tiros = []
 
 		this.frameX = 0
 		this.frameY = 0
@@ -36,6 +32,7 @@ export default class Hero extends Circle {
 
 		this.altura = 38
 		this.largura = 38
+		this.pontos = 0
 
 		this.width = width
 		this.height = height
@@ -44,11 +41,9 @@ export default class Hero extends Circle {
 			this.x + this.width,
 			this.y + this.height,
 			this.size,
-			this.speed,
-			10, "rgba(0,0,255,1)"
+			this.speed
 		)
 
-		// this.animeSprite(FRAMES)
 	}
 
 	draw(CTX) {
@@ -61,26 +56,29 @@ export default class Hero extends Circle {
 			this.largura * 2, this.altura * 2
 		)
 
-		this.hit.draw(CTX)
+		// this.hit.draw(CTX)
 	}
 
-	buster() {
+	buster(tiros, tiro) {
 		if (!this.libera_tiro) {
-			console.log(this.tiros)
 
-			let tiro
-			if (this.esquerda)
-				tiro = new Projetil(this.x + this.largura, this.y + this.altura, 5, -15, 'blue', 'img/X.png');
-			else
-				tiro = new Projetil(this.x, this.y + this.altura, 5, 15, 'blue', 'img/projetil.png');
-			this.tiros.push(tiro);
+			tiro.x = this.x + this.largura + 30
+			tiro.y = this.y + this.altura / 2 + 5
+
+			if (this.esquerda) {
+				tiro.x = this.x - 15
+				tiro.speed = -10
+			}
+
+			this.libera_tiro = true
+			tiros.push(tiro)
 
 		}
 	}
 
 
 
-	move(limits, plataformas) {
+	move(limits, plataformas, tiros) {
 		this.y += this.gravidade
 
 		if (this.direita) {
@@ -126,14 +124,6 @@ export default class Hero extends Circle {
 				this.frameX = 2
 		}
 
-		if (this.atirando) {
-			this.buster()
-		}
-		else
-			this.libera_tiro = false
-
-
-
 		if (getKeys().length === 0)
 			this.frameX = 0
 
@@ -173,11 +163,5 @@ export default class Hero extends Circle {
 	updateHit() {
 		this.hit.x = this.x + this.width
 		this.hit.y = this.y + this.height
-	}
-
-	colide(other) {
-		return (this.hit.size + other.size >= Math.sqrt(
-			(this.hit.x - other.x) ** 2 + (this.hit.y - other.y) ** 2)
-		)
 	}
 }
