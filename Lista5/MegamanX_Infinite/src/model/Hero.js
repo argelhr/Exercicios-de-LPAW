@@ -33,6 +33,7 @@ export default class Hero extends Circle {
 		this.altura = 38
 		this.largura = 38
 		this.pontos = 0
+		this.vida = 0
 
 		this.width = width
 		this.height = height

@@ -41,7 +41,7 @@ export default class Enemy extends Circle {
 
 		this.updateHit()
 		// this.draw(CTX)
-		this.hit.draw(CTX)
+		// this.hit.draw(CTX)
 	}
 
 	move(limits) {
