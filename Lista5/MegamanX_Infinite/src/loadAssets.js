@@ -10,4 +10,14 @@ const loadImage = async (url)=>
     console.log('loading img: '+url)
 });
 
-export {loadImage}
+const loadAudio = async(path)=>
+new Promise(resolve=>{
+    const audio = new Audio(path)
+    console.log('loading audio...')
+    audio.addEventListener("canplaythrough",()=>{
+        // console.log('Audio loaded: '+path)
+        return resolve(audio)
+    });
+});
+
+export {loadImage,loadAudio}

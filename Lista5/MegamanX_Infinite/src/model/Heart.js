@@ -17,7 +17,7 @@ export default class Heart extends Circle {
         this.FRAMES = FRAMES
 
 
-        this.spriteSpeed = 1
+        this.spriteSpeed = 3
 
         this.frameX = 0
 
@@ -28,7 +28,7 @@ export default class Heart extends Circle {
             this.speed,
             20, "rgba(255,0,0,1)"
         )
-        this.animeSprite(30)
+        this.animeSprite(FRAMES)
 
 
 

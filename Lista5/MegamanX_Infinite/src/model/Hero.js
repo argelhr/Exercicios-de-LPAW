@@ -79,7 +79,7 @@ export default class Hero extends Circle {
 
 
 
-	move(limits, plataformas, tiros) {
+	move(limits, plataformas) {
 		this.y += this.gravidade
 
 		if (this.direita) {
