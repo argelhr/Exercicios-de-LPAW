@@ -14,14 +14,14 @@ export default class Enemy extends Circle {
 		this.height = 39
 
 
-		this.spriteSpeed = 1
+		this.spriteSpeed = 2
 
 		this.frameY = frame
 		this.frameX = 0
 
 		this.hit = new Circle(
-			this.x,
-			this.y,
+			this.x + this.width,
+			this.y + this.height,
 			this.size,
 			this.speed,
 			10, "rgba(255,0,0,1)"
@@ -61,7 +61,7 @@ export default class Enemy extends Circle {
 
 	limits(limits) {
 
-		if (this.x < 0 && Math.random() > 0.9755) {
+		if (this.x < -70 && Math.random() > 0.9755) {
 			// this.trocaCor()
 			this.frameX = 0
 			this.y = Math.random() * limits.height
@@ -87,7 +87,7 @@ export default class Enemy extends Circle {
 			this.frameX = this.frameX < 10
 				? this.frameX + 1
 				: 0;
-		}, 1000 / (40 * this.spriteSpeed / 9))
+		}, 1000 / (40 * this.spriteSpeed / 10))
 	}
 }
 

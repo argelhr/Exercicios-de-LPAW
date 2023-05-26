@@ -22,7 +22,7 @@ let ready
 
 let boundaries = {
     width: canvas.width,
-    height: canvas.height - 99
+    height: canvas.height - 73
 }
 
 let megaman//heroi
@@ -100,7 +100,7 @@ const init = async () => {
     som_dano = await loadAudio('audio/dano_megaman.mp3')
     som_buster = await loadAudio('audio/buster.mp3')
 
-    som_dano_inimigo = await loadAudio('audio/colisao_buster_inimigo.mp3')
+    som_dano_inimigo = await loadAudio('audio/explosion_old.mp3')
     death = await loadAudio('audio/death.mp3')
     som_item = await loadAudio('audio/heart.mp3')
 
@@ -156,7 +156,6 @@ const pre_loop = () => {
 const loop = () => {
     setTimeout(() => {
 
-        // ctx.drawImage(bgImage, 0, 0, 480, 352, 0, 0, canvas.width, canvas.height)
         bgImage3.draaw(ctx)
         ctx.drawImage(bgImage2, 0, 0)
         ctx.drawImage(barra, 1, 1, 15, 85, 20, 20, 30, 160)
@@ -166,8 +165,12 @@ const loop = () => {
         //foreach do inimigo <=
         enemyLEFT.forEach(e => {
 
+            megaman.hit.draw(ctx)
+
             e.moveEsquerda(boundaries)
             e.draaw(ctx)
+            // e.draw(ctx)
+            // e.hit.draw(ctx)
 
             if (e.hit.colide(megaman.hit)) {
                 e.respawn(boundaries)
@@ -177,16 +180,15 @@ const loop = () => {
             }
 
             tiros.forEach(t => {
-                // indice++
-                if (e.colide(t)) {
+                
+                if (t.colide(e.hit)) {
                     e.respawn(boundaries)
                     som_dano_inimigo.currentTime = 0
                     som_dano_inimigo.play()
 
-                    t.x += 700
+                    t.y += 700
 
                     megaman.pontos++
-                    //     tiros.splice(indice, 1)
 
                 }
             })
@@ -196,6 +198,8 @@ const loop = () => {
 
             e.move(boundaries)
             e.draaw(ctx)
+            // e.draw(ctx)
+            // e.hit.draw(ctx)
 
             if (e.hit.colide(megaman.hit)) {
                 e.respawn(boundaries)
@@ -203,10 +207,10 @@ const loop = () => {
                 som_dano.currentTime = 0
                 som_dano.play()
             }
-
+            
             tiros.forEach(t => {
                 if (e.hit.colide(t)) {
-                    t.x -= 700
+                    t.y += 700
                     som_dano_inimigo.currentTime = 0
                     som_dano_inimigo.play()
                     e.respawn(boundaries)
@@ -247,6 +251,7 @@ const loop = () => {
         tiros.forEach(t => {
             t.move()
             t.drawb(ctx)
+
         })
 
         heart.draaw(ctx)// heart.hit.draw(ctx)
@@ -264,9 +269,9 @@ const loop = () => {
             console.error('DEAD!!!')
             bola1.x = bola2.x = bola3.x = bola4.x = megaman.x
             bola1.y = bola2.y = bola3.y = bola4.y = megaman.y
+            theme.pause()
             death.currentTime = 0.5
             death.play()
-            theme.pause()
             requestAnimationFrame(morte)
         } else animeReqReference = requestAnimationFrame(loop)
 

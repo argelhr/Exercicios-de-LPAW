@@ -71,7 +71,7 @@ export default class Heart extends Circle {
     respawn(limits) {
         let aux = Math.random()
         if (aux > 0.75) {
-            this.y = limits.height + this.height * 3
+            this.y = limits.height + this.height
             this.x = limits.width * Math.random()
         } else if (aux > 0.5) {
             this.y = 252 - this.height + 5

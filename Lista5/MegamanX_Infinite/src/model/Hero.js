@@ -14,17 +14,20 @@ export default class Hero extends Circle {
 				this.img = img
 			})
 
+		this.lado = 'right'
 		this.parado = true
-		this.esquerda = false
-		this.direita = false
+
 		this.atirando = false
+		this.pulando = false
 		this.pulo = false
+
+
 
 		this.libera_tiro = false
 
 		this.chao = true
 		this.gravidade = 10
-		this.velocidadeY = 18
+		this.velocidadeY = 0
 
 		this.frameX = 0
 		this.frameY = 0
@@ -63,12 +66,13 @@ export default class Hero extends Circle {
 	buster(tiros, tiro) {
 		if (!this.libera_tiro) {
 
-			tiro.x = this.x + this.largura + 30
+			tiro.x = this.x + this.largura + 15
 			tiro.y = this.y + this.altura / 2 + 5
 
-			if (this.esquerda) {
-				tiro.x = this.x - 15
-				tiro.speed = -10
+			if (this.lado == 'left') {
+				tiro.x = this.x
+				tiro.speed = -15
+
 			}
 
 			this.libera_tiro = true
@@ -80,61 +84,94 @@ export default class Hero extends Circle {
 
 
 	move(limits, plataformas) {
-		this.y += this.gravidade
-
-		if (this.direita) {
-			this.x += this.speed
-			this.frameX += 1
-			if (this.atirando)
-				this.frameY = 1
-			else
-				this.frameY = 0
-			if (this.frameX > 11)
-				this.frameX = 2
-		}
-		if (this.esquerda) {
-			this.x -= this.speed
-			this.frameX += 1
-
-			if (this.atirando)
-				this.frameY = 3
-			else
-				this.frameY = 2
-
-			if (this.frameX > 11)
-				this.frameX = 2
-		}
-
-		if (this.pulo) {
-			this.chao = false
-			this.pulando = true
-			this.y -= this.velocidadeY
-			this.frameX += 1
-			if (this.esquerda)
-				if (this.atirando)
-					this.frameY = 7
-				else
-					this.frameY = 6
-			else
-				if (this.atirando)
-					this.frameY = 5
-				else
-					this.frameY = 4
-
-			if (this.frameX >= 11)
-				this.frameX = 2
-		}
-
-		if (getKeys().length === 0)
-			this.frameX = 0
 
 
-		this.esquerda = hasKey('KeyA') ? true : false
-		this.direita = hasKey('KeyD') ? true : false
+		this.parado = hasKey('KeyA') || hasKey('KeyD') ? false : true
 		this.atirando = hasKey('Enter') ? true : false
-		this.pulo = hasKey('Space') ? true : false
 
-		hasKey('KeyD') && hasKey('KeyA') ? this.frameX = 0 : null
+		if (this.chao) {
+			if (!this.parado) {
+
+				this.frameX += 1
+				if (this.frameX > 11)
+					this.frameX = 2
+
+				if (this.lado === 'left') {
+					this.x -= this.speed
+					if (this.atirando)
+						this.frameY = 3
+					else
+						this.frameY = 2
+
+				} else {
+					if (this.lado === 'right') {
+						this.x += this.speed
+						if (this.atirando)
+							this.frameY = 1
+						else
+							this.frameY = 0
+					}
+				}
+			}
+			else {
+				if (this.lado === 'right') {
+					this.frameX = 0
+					if (this.atirando)
+						this.frameY = 1
+					else
+						this.frameY = 0
+				} else if (this.lado === 'left') {
+					this.frameX = 0
+					if (this.atirando)
+						this.frameY = 3
+					else
+						this.frameY = 2
+				}
+
+
+			}
+		}
+		else {
+
+
+
+		}
+
+		if (hasKey('Space') && this.chao) {
+			this.velocidadeY = 0
+			this.chao = false
+			console.log(this.chao)
+		}
+		else {
+			this.y += this.velocidadeY
+			console.log(this.velocidadeY)
+			if (!this.chao) {
+				if (this.velocidadeY <= 12) {
+					this.y -= 15
+					this.velocidadeY += 1
+				}
+
+				this.frameX = 0
+				if (hasKey('KeyD')) {
+					this.x += this.speed
+					this.frameY = this.atirando ? 5 : 4
+				}
+				else if (hasKey('KeyA')) {
+					this.x -= this.speed
+					this.frameY = this.atirando ? 7 : 6
+				}
+
+
+				///
+			}
+			else
+				this.velocidadeY = 12
+		}
+
+
+		if (!this.parado)
+			if (hasKey('KeyA') && !hasKey('KeyD')) { this.lado = 'left' }
+			else if (hasKey('KeyD') && !hasKey('keyA')) this.lado = 'right'
 
 
 		this.updateHit()
@@ -142,7 +179,7 @@ export default class Hero extends Circle {
 
 		plataformas.forEach(plat => {
 			plat.colide(this)
-		});
+		})
 
 
 	}
@@ -154,8 +191,8 @@ export default class Hero extends Circle {
 			this.y = 0
 		if (this.x + this.largura * 2 >= limits.width)
 			this.x = limits.width - this.largura * 2
-		if (this.y + this.altura / 3 > limits.height) {
-			this.y = limits.height - this.altura / 3
+		if (this.y + this.altura > limits.height) {
+			this.y = limits.height - this.altura
 			this.chao = true
 		}
 

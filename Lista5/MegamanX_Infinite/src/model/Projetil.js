@@ -20,7 +20,7 @@ export default class Projetil extends Circle {
             0, 0,
             8, 6,
             this.x, this.y,
-            16, 12
+            24, 16
         )
     }
 }

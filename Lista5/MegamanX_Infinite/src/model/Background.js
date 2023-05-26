@@ -39,7 +39,7 @@ export default class Background {
             this.frameX = this.frameX < 3
                 ? this.frameX + 1
                 : 0;
-        }, 1000 / (FRAMES * this.spriteSpeed / 9))
+        }, 1000 / (FRAMES * this.spriteSpeed / 3))
     }
 
 }
