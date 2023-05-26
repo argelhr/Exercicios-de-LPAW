@@ -131,11 +131,6 @@ export default class Hero extends Circle {
 
 			}
 		}
-		else {
-
-
-
-		}
 
 		if (hasKey('Space') && this.chao) {
 			this.velocidadeY = 0
@@ -154,15 +149,16 @@ export default class Hero extends Circle {
 				this.frameX = 0
 				if (hasKey('KeyD')) {
 					this.x += this.speed
-					this.frameY = this.atirando ? 5 : 4
 				}
 				else if (hasKey('KeyA')) {
 					this.x -= this.speed
-					this.frameY = this.atirando ? 7 : 6
 				}
 
+				if (this.lado === 'right')
+					this.frameY = this.atirando ? 5 : 4
+				else
+					this.frameY = this.atirando ? 7 : 6
 
-				///
 			}
 			else
 				this.velocidadeY = 12

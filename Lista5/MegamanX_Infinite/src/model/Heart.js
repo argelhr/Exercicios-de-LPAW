@@ -48,7 +48,7 @@ export default class Heart extends Circle {
     }
 
     draaw(CTX) {
-
+        if(!this.img) return;
         CTX.drawImage(
             this.img,
             this.frameX * this.width, 0,

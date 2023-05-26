@@ -15,6 +15,7 @@ export default class Projetil extends Circle {
     }
     drawb(ctx) {
         // console.log(this)
+        if(!this.img) return;
         ctx.drawImage(
             this.img,
             0, 0,

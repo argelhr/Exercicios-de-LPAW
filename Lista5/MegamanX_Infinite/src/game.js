@@ -95,12 +95,13 @@ const init = async () => {
 
     // sons do jogo
     theme = await loadAudio('audio/fase.mp3')
-    theme.volume = .3
+    theme.volume = .5
 
     som_dano = await loadAudio('audio/dano_megaman.mp3')
     som_buster = await loadAudio('audio/buster.mp3')
 
     som_dano_inimigo = await loadAudio('audio/explosion_old.mp3')
+    som_dano_inimigo.volume = .3
     death = await loadAudio('audio/death.mp3')
     som_item = await loadAudio('audio/heart.mp3')
 
