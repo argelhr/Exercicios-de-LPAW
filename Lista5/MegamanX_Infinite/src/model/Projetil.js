@@ -14,7 +14,6 @@ export default class Projetil extends Circle {
         this.x += this.speed
     }
     drawb(ctx) {
-        // console.log(this)
         if(!this.img) return;
         ctx.drawImage(
             this.img,

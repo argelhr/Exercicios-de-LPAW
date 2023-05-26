@@ -1,7 +1,7 @@
 import { loadImage } from "../loadAssets";
 import Circle from "./Circle";
 
-export default class Heart extends Circle {
+export default class Image extends Circle {
     constructor(x, y, size, speed = 10, color, imgURL, total_frame, FRAMES = 60, w, h) {
         super(x, y, size, speed, color)
         this.imgURL = imgURL

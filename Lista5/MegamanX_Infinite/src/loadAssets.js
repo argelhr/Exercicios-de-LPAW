@@ -20,4 +20,14 @@ new Promise(resolve=>{
     });
 });
 
-export {loadImage,loadAudio}
+const loadVideo = async(path)=>new Promise(resolve=>{
+    const video = document.createElement('video')
+    video.src = path;
+    console.log('loading video...')
+    return video.addEventListener("canplaythrough",()=>{
+        console.log('Video loaded: '+path)
+        return resolve(video)
+    });
+});
+
+export {loadImage,loadAudio, loadVideo}

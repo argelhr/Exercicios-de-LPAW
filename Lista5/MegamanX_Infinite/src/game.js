@@ -1,11 +1,10 @@
-import { loadAudio, loadImage } from "./loadAssets"
+import { loadAudio, loadImage, loadVideo } from "./loadAssets"
 import { getKeys, hasKey, keyDownUp } from "./keyboard"
 import Hero from "./model/Hero"
 import Rect from "./model/Rect"
 import Enemy from "./model/Enemy"
-import Heart from "./model/Heart"
+import Image from "./model/Image"
 import Projetil from "./model/Projetil"
-import Background from "./model/Background"
 
 
 let canvas = document.querySelector('#canvas')
@@ -16,8 +15,9 @@ let bgImage2
 let bgImage3
 let texto
 let barra
-let animeReqReference
+let video
 let ready
+let animeReqReference
 
 
 let boundaries = {
@@ -37,7 +37,7 @@ let bola1, bola2, bola3, bola4//frames que aparece na morte
 let theme
 let som_buster
 let som_item
-let som_dano
+let som_dano // dano no megaman
 let som_dano_inimigo //dano no inimigo
 let death
 
@@ -86,7 +86,6 @@ const init = async () => {
 
     console.log("Iniciando game...")
 
-    bgImage3 = new Background('img/background3.png')
     bgImage = await loadImage('img/background3.png') //background da catarata
     // pattern = ctx.createPattern(bgImage, 'repeat') //obsoleto
     bgImage2 = await loadImage('img/background2.png') //background de onde o megaman anda
@@ -105,24 +104,26 @@ const init = async () => {
     death = await loadAudio('audio/death.mp3')
     som_item = await loadAudio('audio/heart.mp3')
 
+    video = await loadVideo('video/back.mp4') //backgound em video da catarata
 
     //instanciando os personagens e item
     megaman = new Hero(canvas.width / 2, canvas.height, 25, 10, 38, 38, 'img/X.png')
-    heart = new Heart(100, 243, 15, 0, 'red', 'img/item.png', 3, 30, 15, 16)
+    heart = new Image(100, 243, 15, 0, 'red', 'img/item.png', 3, 30, 15, 16)
 
 
-    //reaprovetei a classe heart por ter os metodos que preciso pra ficar mudando a sprite desses componentes
-    ready = new Heart(canvas.width / 2 + 40, canvas.height / 2 -50, 0, 3, 'red', 'img/ready.png', 14, 60, 40, 14)
-    bola1 = new Heart(0, 0, 0, 5, 'red', 'img/bola.png', 13, 120, 41, 39)
-    bola2 = new Heart(0, 0, 0, 5, 'red', 'img/bola.png', 13, 120, 41, 39)
-    bola3 = new Heart(0, 0, 0, 5, 'red', 'img/bola.png', 13, 120, 41, 39)
-    bola4 = new Heart(0, 0, 0, 5, 'red', 'img/bola.png', 13, 120, 41, 39)
+    ready = new Image(canvas.width / 2 + 40, canvas.height / 2 - 50, 0, 3, 'red', 'img/ready.png', 14, 60, 40, 14)
+    bola1 = new Image(0, 0, 0, 5, 'red', 'img/bola.png', 13, 120, 41, 39)
+    bola2 = new Image(0, 0, 0, 5, 'red', 'img/bola.png', 13, 120, 41, 39)
+    bola3 = new Image(0, 0, 0, 5, 'red', 'img/bola.png', 13, 120, 41, 39)
+    bola4 = new Image(0, 0, 0, 5, 'red', 'img/bola.png', 13, 120, 41, 39)
 
     enemyLEFT = enemyLEFT.map(e => new Enemy(canvas.width, (Math.random() * canvas.height), 25, 10, 'red', 'img/enemy.png', 1))
     enemyRIGTH = enemyRIGTH.map(e => new Enemy(canvas.width, Math.random() * canvas.height, 25, 10, 'red', 'img/enemy.png', 0))
 
     console.log("Game iniciado com sucesso!")
     theme.play()
+    video.currentTime = 0
+    video.play()
 
     keyDownUp(window)
     pre_loop()
@@ -132,16 +133,20 @@ const init = async () => {
 let aux = 0
 const pre_loop = () => {
     setTimeout(() => {
+
         aux++
-        bgImage3.draaw(ctx)
-        ctx.drawImage(bgImage2, 0, 0)
-        ctx.drawImage(barra, 1, 1, 15, 85, 20, 20, 30, 160)
-        ctx.fillStyle = 'black'
-        ctx.fillRect(26, 26, 16, megaman.vida * 12.2)
 
-        ready.draaw(ctx)
+        //se o video tiver carregado ele desenha o video
+        if (video)
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+
+        ctx.drawImage(bgImage2, 0, 0)//plataformas
 
 
+        ready.draaw(ctx)//o ready inicial
+
+
+        // contagem para começar o jogo
         if (aux === 110) {
             cancelAnimationFrame(pre_loop)
             requestAnimationFrame(loop)
@@ -157,8 +162,18 @@ const pre_loop = () => {
 const loop = () => {
     setTimeout(() => {
 
-        bgImage3.draaw(ctx)
+
+        // desenhando o background em video
+        if (video)
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+        if (video.paused) {
+            video.currentTime = 0
+            video.play()
+        }
+        //background das plataformas
         ctx.drawImage(bgImage2, 0, 0)
+
+        //imagem da barra de vida
         ctx.drawImage(barra, 1, 1, 15, 85, 20, 20, 30, 160)
         ctx.fillStyle = 'black'
         ctx.fillRect(26, 26, 16, megaman.vida * 12.2)
@@ -166,13 +181,11 @@ const loop = () => {
         //foreach do inimigo <=
         enemyLEFT.forEach(e => {
 
-            megaman.hit.draw(ctx)
-
+            //movimenta inimigo e redesenha
             e.moveEsquerda(boundaries)
             e.draaw(ctx)
-            // e.draw(ctx)
-            // e.hit.draw(ctx)
 
+            //verifica colisão com o hero
             if (e.hit.colide(megaman.hit)) {
                 e.respawn(boundaries)
                 som_dano.currentTime = 0
@@ -181,15 +194,16 @@ const loop = () => {
             }
 
             tiros.forEach(t => {
-                
+
+                //verifica colisão com os tiros
                 if (t.colide(e.hit)) {
-                    e.respawn(boundaries)
+                    e.respawn(boundaries) // se colidir inimigo reapare no final do canvas
                     som_dano_inimigo.currentTime = 0
                     som_dano_inimigo.play()
 
                     t.y += 700
 
-                    megaman.pontos++
+                    megaman.pontos++//pontuação soma 1
 
                 }
             })
@@ -197,31 +211,32 @@ const loop = () => {
 
         enemyRIGTH.forEach(e => {
 
+            //movimenta o inimigo e redesenha
             e.move(boundaries)
             e.draaw(ctx)
-            // e.draw(ctx)
-            // e.hit.draw(ctx)
 
+            //verifica colisão com o megaman
             if (e.hit.colide(megaman.hit)) {
                 e.respawn(boundaries)
                 megaman.vida++
                 som_dano.currentTime = 0
                 som_dano.play()
             }
-            
+
             tiros.forEach(t => {
+                // verifica colisão com os tiros
                 if (e.hit.colide(t)) {
                     t.y += 700
                     som_dano_inimigo.currentTime = 0
                     som_dano_inimigo.play()
                     e.respawn(boundaries)
                     megaman.pontos++
-                    //     tiros.splice(indice, 1)
                 }
             })
 
         })
 
+        //para escrever a pontuação do jogo
         let textSize = 24;
         ctx.font = `bold ${textSize}px sans`;
         ctx.textBaseline = "top";
@@ -233,7 +248,7 @@ const loop = () => {
             textSize / 3
         )
 
-        //quando clica pra atirar, cria apenas um
+        //quando clica pra atirar, cria apenas um tiro
         if (megaman.atirando) {
             tiro = new Projetil(megaman.x, megaman.y - 80, 15, 13, 'red', projetil)
             if (!megaman.libera_tiro) {
@@ -241,22 +256,26 @@ const loop = () => {
                 som_buster.play()
                 megaman.buster(tiros, tiro)
             }
-            //aqui dentro deste metodo nao deixa criar novos tiros com apenas um enter
         }
         else
             megaman.libera_tiro = false
 
+
+        //calculo de movimento e sprites do heroi
         megaman.move(boundaries, blocos)
         megaman.draw(ctx)
 
+        //movimenta os tiros pelo canvas
         tiros.forEach(t => {
             t.move()
             t.drawb(ctx)
 
         })
 
+        //desenha o item coletavel
         heart.draaw(ctx)// heart.hit.draw(ctx)
 
+        //verifica se o hero coletou o item e soma 10 na pontuação
         if (heart.hit.colide(megaman.hit)) {
             heart.respawn(boundaries)
             megaman.pontos += 10
@@ -264,8 +283,10 @@ const loop = () => {
             som_item.play()
         }
 
+        //verifica se o hero colidiu 10 vezes com os inimugos
         gameover = megaman.vida === 10 ? true : false
 
+        //gameover, carrega o loop de morte
         if (gameover) {
             console.error('DEAD!!!')
             bola1.x = bola2.x = bola3.x = bola4.x = megaman.x
@@ -283,23 +304,30 @@ const morte = () => {
     setTimeout(() => {
 
 
-        // ctx.drawImage(bgImage, 0, 0, 480, 352, 0, 0, canvas.width, canvas.height)
-        bgImage3.draaw(ctx)
-        ctx.drawImage(bgImage2, 0, 0)
-        ctx.drawImage(barra, 1, 1, 15, 85, 20, 20, 30, 160)
+        if (video)
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+        if (video.paused) {
+            video.currentTime = 0
+            video.play()
+        }
+        ctx.drawImage(bgImage2, 0, 0)//plataformas
+        ctx.drawImage(barra, 1, 1, 15, 85, 20, 20, 30, 160)//barra de vida
         ctx.fillStyle = 'black'
         ctx.fillRect(26, 26, 16, megaman.vida * 12.2)
 
+        //desenho das esferas ao hero morrer
         bola1.draaw(ctx)
         bola2.draaw(ctx)
         bola3.draaw(ctx)
         bola4.draaw(ctx)
 
+        //movimento das esferas ao hero morrer
         bola1.moveX()
         bola2.moveX2()
         bola3.moveY()
         bola4.moveY2()
 
+        //pontuação continua
         let textSize = 24;
         ctx.font = `bold ${textSize}px sans`;
         ctx.textBaseline = "top";
