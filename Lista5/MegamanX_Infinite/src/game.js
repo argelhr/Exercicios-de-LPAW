@@ -284,7 +284,7 @@ const loop = () => {
         }
 
         //verifica se o hero colidiu 10 vezes com os inimugos
-        gameover = megaman.vida === 10 ? true : false
+        gameover = megaman.vida >= 10 ? true : false
 
         //gameover, carrega o loop de morte
         if (gameover) {
@@ -301,8 +301,8 @@ const loop = () => {
 }
 
 const morte = () => {
+    
     setTimeout(() => {
-
 
         if (video)
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
